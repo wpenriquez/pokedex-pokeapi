@@ -1,0 +1,8 @@
+.pokemonlist {
+  @apply h-full md:backdrop-blur-xl;
+}
+
+
+.pokedex-item {
+  @apply border border-blue-300 bg-blue-500 bg-opacity-50 text-white p-5 backdrop-blur-sm rounded-[15px] mb-5 text-center text-lg;
+}

@@ -2,16 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-cyan-200;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-attachment: fixed;
-  background-position: center center;
+html {
+  @apply h-full;
+  body {
+    @apply bg-cyan-200 h-full;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center center;
 
-  &.search,
-  &.list,
-  &.pokemon {
-    background-image: url("../../assets/background/pokedex-bg.jpeg");
+    &.search,
+    &.list,
+    &.pokemon {
+      background-image: url("../../assets/background/pokedex-bg.jpeg");
+    }
+
+    #root {
+      @apply h-full;
+    }
   }
 }

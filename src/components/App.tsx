@@ -9,7 +9,7 @@ import Pokedex from "./Pokedex";
 const App = () => {
   return (
     <Provider store={store}>
-      <div className="p-5">
+      <div className="container mx-auto h-full">
         <Routes>
           <Route path="/" element={<Pokedex />} />
           <Route path="search" element={<PokemonSearchResult />} />
