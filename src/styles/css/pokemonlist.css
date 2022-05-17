@@ -1,5 +1,5 @@
 .pokemonlist {
-  @apply h-full md:backdrop-blur-xl;
+  @apply h-full lg:backdrop-blur-xl;
 }
 
 .pokedex-item {

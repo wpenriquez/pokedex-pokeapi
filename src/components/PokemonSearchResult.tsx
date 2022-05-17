@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useActions } from "../hooks/useActions";
 import { useTypedSelector } from "../hooks/useTypedSelector";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -9,11 +9,17 @@ const PokemonSearchResult: React.FC = () => {
   const location = path.split("/")[1];
   const navigate = useNavigate();
   const [keyword, setKeyword] = useState("");
-  const [list, setList] = useState({});
-  const { searchPokemon } = useActions();
+  const { searchPokemon, displayFlavorText } = useActions();
   const { loading, error, data } = useTypedSelector(
     (state) => state.repositories
   );
+  const { flavorTextLoading, flavorTextError, flavorText } = useTypedSelector(
+    (state) => state.flavorText
+  );
+
+  useEffect(() => {
+    displayFlavorText("");
+  }, []);
 
   // FUNCTION TO CHANGE BACKGROUND WHEN CHANGING WEBSITE PAGE
   const changeBackground = () => {
@@ -29,6 +35,7 @@ const PokemonSearchResult: React.FC = () => {
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     searchPokemon(keyword);
+    displayFlavorText(keyword);
   };
 
   const inputHandler = (param: string): void => {
@@ -84,7 +91,7 @@ const PokemonSearchResult: React.FC = () => {
         {!loading && !error && (
           <div>
             {Object.keys(data).length !== 0 && data.id && (
-              <h2 className="text-3xl capitalize font-bold">
+              <h2 className="text-3xl capitalize font-bold text-white bg-blue-500/75">
                 #{data.id} {data.name}
               </h2>
             )}
@@ -147,6 +154,17 @@ const PokemonSearchResult: React.FC = () => {
                 )}
               </div>
             )}
+            <div className="desc">
+              {flavorTextLoading && <p>Loading...</p>}
+              {flavorTextError === "Request failed with status code 404" ? (
+                <p>Description Unavailable</p>
+              ) : (
+                <p>{flavorTextError}</p>
+              )}
+              {!flavorTextLoading && !flavorTextError && flavorText && (
+                <p className="text-white">{flavorText.flavor_text}</p>
+              )}
+            </div>
           </div>
         )}
       </div>

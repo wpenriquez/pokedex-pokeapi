@@ -13,16 +13,21 @@ const PokemonList: React.FC = () => {
   const path = useLocation().pathname;
   const location = path.split("/")[1];
   const navigate = useNavigate();
-  const { getPokemonList, displayPokemon } = useActions();
+  const { getPokemonList, displayPokemon, displayFlavorText } = useActions();
   const { loading, error, data } = useTypedSelector(
     (state) => state.repositories
   );
+  const { flavorTextLoading, flavorTextError, flavorText } = useTypedSelector(
+    (state) => state.flavorText
+  );
+
   const [page, setPage] = useState(
     "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=10"
   );
 
   useEffect(() => {
     getPokemonList(page);
+    console.log(data);
   }, [page]);
 
   // FUNCTION TO CHANGE BACKGROUND WHEN CHANGING WEBSITE PAGE
@@ -36,9 +41,12 @@ const PokemonList: React.FC = () => {
 
   changeBackground();
 
-  const showPokemon = (link: string): void => {
+  const showPokemon = (name: string, link: string): void => {
     displayPokemon(link);
-    // navigate("/pokemon");
+    displayFlavorText(name);
+    if (flavorText) {
+      console.log(flavorText);
+    }
   };
 
   return (
@@ -86,7 +94,7 @@ const PokemonList: React.FC = () => {
                     data.results.map((val: any, index: number) => (
                       <li
                         key={index}
-                        onClick={() => showPokemon(val.url)}
+                        onClick={() => showPokemon(val.name, val.url)}
                         className="pokedex-item capitalize"
                       >
                         {val.name}
@@ -119,7 +127,7 @@ const PokemonList: React.FC = () => {
         {data.id && (
           // SELECTED POKEMON CONTENT CONTAINER
           <div className="display-pokemon fixed bg-white  h-[94%] border left-5 top-5 p-5 w-[89.4%] rounded-lg flex flex-col justify-center overflow-y-scroll">
-            <div className="content mt-64">
+            <div className="content">
               {/* CLOSE BUTTON */}
               <div className="close-btn fixed bg-black text-red-500 w-10 h-10 rounded-full text-center leading-10 left-2 top-2 z-30">
                 <button onClick={() => getPokemonList(page)}>
@@ -199,17 +207,11 @@ const PokemonList: React.FC = () => {
                 )}
               </div>
               <div className="desc">
-                <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Mollitia enim nisi ad explicabo, possimus sunt sapiente
-                  temporibus saepe quibusdam ex culpa repellendus sint, quas
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Mollitia enim nisi ad explicabo, possimus sunt sapiente
-                  temporibus saepe quibusdam ex culpa repellendus sint,
-                  quasLorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Mollitia enim nisi ad explicabo, possimus sunt sapiente
-                  temporibus saepe quibusdam ex culpa repellendus sint, quas
-                </p>
+                {flavorTextLoading && <p>Loading...</p>}
+                {flavorTextError && <p>{flavorTextError}</p>}
+                {!flavorTextLoading && !flavorTextError && flavorText && (
+                  <p>{flavorText.flavor_text}</p>
+                )}
               </div>
             </div>
           </div>

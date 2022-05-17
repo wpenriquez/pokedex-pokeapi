@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Dispatch } from "redux";
 import { ActionType } from "../action-types";
-import { Action } from "../actions";
+import { Action, FlavorTextAction } from "../actions";
 
 export const searchPokemon = (term: string) => {
   return async (dispatch: Dispatch<Action>) => {
@@ -73,6 +73,40 @@ export const displayPokemon = (link: string) => {
         type: ActionType.SEARCH_POKEMON_ERROR,
         payload: err.message,
       });
+    }
+  };
+};
+
+export const displayFlavorText = (pokemon: string) => {
+  return async (dispatch: Dispatch<FlavorTextAction>) => {
+    if (pokemon === "") {
+      dispatch({
+        type: ActionType.POKEMON_FLAVORTEXT_RESET,
+      });
+    } else {
+      dispatch({
+        type: ActionType.POKEMON_FLAVORTEXT_LOADING,
+      });
+
+      try {
+        const { data } = await axios.get(
+          `https://pokeapi.co/api/v2/pokemon-species/${pokemon}`
+        );
+
+        const pokemonFlavorText = data.flavor_text_entries.find((val: any) => {
+          return val.language.name === "en";
+        });
+
+        dispatch({
+          type: ActionType.POKEMON_FLAVORTEXT_LOADED,
+          payload: pokemonFlavorText,
+        });
+      } catch (err: any) {
+        dispatch({
+          type: ActionType.POKEMON_FLAVORTEXT_ERROR,
+          payload: err.message,
+        });
+      }
     }
   };
 };
