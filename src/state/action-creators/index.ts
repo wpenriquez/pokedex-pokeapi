@@ -79,18 +79,24 @@ export const displayPokemon = (link: string) => {
 
 export const displayFlavorText = (pokemon: string) => {
   return async (dispatch: Dispatch<FlavorTextAction>) => {
+    let pokemonName: string;
     if (pokemon === "") {
       dispatch({
         type: ActionType.POKEMON_FLAVORTEXT_RESET,
       });
     } else {
+      if (pokemon.indexOf("-") > 0) {
+        pokemonName = pokemon.substring(0, pokemon.indexOf("-"));
+      } else {
+        pokemonName = pokemon;
+      }
       dispatch({
         type: ActionType.POKEMON_FLAVORTEXT_LOADING,
       });
 
       try {
         const { data } = await axios.get(
-          `https://pokeapi.co/api/v2/pokemon-species/${pokemon}`
+          `https://pokeapi.co/api/v2/pokemon-species/${pokemonName}`
         );
 
         const pokemonFlavorText = data.flavor_text_entries.find((val: any) => {

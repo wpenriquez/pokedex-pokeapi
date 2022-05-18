@@ -64,6 +64,15 @@ const PokemonSearchResult: React.FC = () => {
           </thead>
           <tbody>
             <tr>
+              <td>Advanced Search:
+                <ul className='text-xs list-disc pl-5'>
+                  <li>For Male or Female forms, add -M or -F at the end e.g. Nidoran-M</li>
+                  <li>For Mega evolution forms, add -Mega at the end e.g. Blaziken-Mega</li>
+                  <li>For Alolan or Galar forms, add -Alola or -Galar at the end e.g. Raichu-Alola / Ponyta-Galar</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
               <td>
                 <input
                   placeholder="e.g. Pikachu"

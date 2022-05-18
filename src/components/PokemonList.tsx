@@ -7,6 +7,8 @@ import { ReactComponent as ReturnIcon } from "../assets/pokedex_icons/return-dow
 import { ReactComponent as BackIcon } from "../assets/pokedex_icons/back.svg";
 import { ReactComponent as NextIcon } from "../assets/pokedex_icons/next.svg";
 import { ReactComponent as CloseIcon } from "../assets/pokedex_icons/close.svg";
+import { ReactComponent as LoadingIcon } from "../assets/pokedex_icons/refresh-outline.svg";
+import { ReactComponent as ReloadCircle } from "../assets/pokedex_icons/reload-circle-outline.svg";
 import "../styles/css/pokemonlist.css";
 
 const PokemonList: React.FC = () => {
@@ -25,12 +27,14 @@ const PokemonList: React.FC = () => {
     "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=10"
   );
 
+  // USE EFFECT TO LOAD LIST OF POKEMON ON COMPONENT MOUNT AND CALL FUNCTION TO CHANGE BACKGROUND IMAGE
   useEffect(() => {
     getPokemonList(page);
-    console.log(data);
+
+    changeBackground();
   }, [page]);
 
-  // FUNCTION TO CHANGE BACKGROUND WHEN CHANGING WEBSITE PAGE
+  // FUNCTION TO CHANGE BACKGROUND IMAGE WHEN CHANGING WEBSITE PAGE
   const changeBackground = () => {
     const body = document.querySelector("body");
     if (body) {
@@ -39,14 +43,29 @@ const PokemonList: React.FC = () => {
     }
   };
 
-  changeBackground();
+  // FUNCTION GET POKEMON ID FROM URL
+  const pokemonId = (id: string): number | null => {
+    const pattern = /\W[0-9]+/g;
+    let tempId: string[] | null = id.match(pattern);
+    let newId: number;
+    if (tempId) {
+      newId = parseInt(tempId[0].replace("/", ""));
+      return newId;
+    } else {
+      return null;
+    }
+  };
 
+  // FUNCTION TO SET POKEMON ICON PER LISTED ITEM
+  const pokemonIcon = (id: number | null): string => {
+    let icon = require(`../../node_modules/pokemon-sprites/sprites/pokemon/versions/generation-viii/icons/${id}.png`);
+    return icon;
+  };
+
+  // FUNCTION TO DISPLAY INFO OF SELECTED POKEMON
   const showPokemon = (name: string, link: string): void => {
     displayPokemon(link);
     displayFlavorText(name);
-    if (flavorText) {
-      console.log(flavorText);
-    }
   };
 
   return (
@@ -58,11 +77,15 @@ const PokemonList: React.FC = () => {
         </h1>
       </header>
       {/* SECTION */}
-      <section className="relative">
+      <section className="relative h-full">
         {/* CONTENT CONTAINER */}
-        <div className="content-container relative">
+        <div className="content-container relative h-full">
           {/* LOADING CONTENT */}
-          {loading && <h2 className="text-2xl">Loading...</h2>}
+          {loading && (
+            <div className="loading-container">
+              <LoadingIcon className="loading-icon w-52 h-52" />
+            </div>
+          )}
           {/* ERROR ON CONTENT */}
           {error === "Request failed with status code 404" ? (
             <h2 className="text-2xl">No Pokemon found</h2>
@@ -88,19 +111,20 @@ const PokemonList: React.FC = () => {
                 </button>
               </div>
               {/* LIST OF POKEMON */}
-              <div className="pokemon-list w-full h-[27rem] overflow-y-scroll">
-                <ul>
+              <div className="pokemon-list w-full h-[27rem] overflow-y-scroll md:overflow-y-auto flex flex-col md:flex-row">
                   {data.results &&
-                    data.results.map((val: any, index: number) => (
-                      <li
-                        key={index}
+                    data.results.map((val: any) => (
+                      <div
+                        key={pokemonId(val.url)}
                         onClick={() => showPokemon(val.name, val.url)}
-                        className="pokedex-item capitalize"
+                        className="pokedex-item"
                       >
-                        {val.name}
-                      </li>
+                        <img src={pokemonIcon(pokemonId(val.url))} alt="" />
+
+                        <p>#{`${pokemonId(val.url)} ${val.name}`}</p>
+                      </div>
                     ))}
-                </ul>
+                
               </div>
               {/* POKEDEX BOTTOM NAV ICONS */}
               {data.results && (
@@ -126,7 +150,7 @@ const PokemonList: React.FC = () => {
         </div>
         {data.id && (
           // SELECTED POKEMON CONTENT CONTAINER
-          <div className="display-pokemon fixed bg-white  h-[94%] border left-5 top-5 p-5 w-[89.4%] rounded-lg flex flex-col justify-center overflow-y-scroll">
+          <div className="display-pokemon fixed bg-white  h-[94%] left-5 top-5 p-5 w-[89.4%] rounded-lg flex flex-col justify-center overflow-y-scroll">
             <div className="content">
               {/* CLOSE BUTTON */}
               <div className="close-btn fixed bg-black text-red-500 w-10 h-10 rounded-full text-center leading-10 left-2 top-2 z-30">

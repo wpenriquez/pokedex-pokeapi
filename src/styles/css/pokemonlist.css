@@ -1,7 +1,37 @@
 .pokemonlist {
-  @apply h-full lg:backdrop-blur-xl;
+  @apply h-full bg-cyan-700 bg-opacity-50;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-container {
+  width: 15rem;
+  height: 15rem;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -70%);
+}
+
+.loading-container .loading-icon {
+  animation: spin 1s linear infinite;
+  transform-origin: 47% 50%;
 }
 
 .pokedex-item {
-  @apply border border-blue-300 bg-blue-500 bg-opacity-50 text-white p-5 backdrop-blur-sm rounded-[15px] mb-5 text-center text-lg;
+  @apply border border-blue-300 bg-blue-500 bg-opacity-50 text-white p-5 rounded-[15px] mb-5 text-center text-lg capitalize flex flex-col items-center md:w-52 md:h-52;
+}
+
+.pokedex-item img {
+  @apply w-20 h-auto mb-2;
 }
