@@ -1,5 +1,5 @@
 .pokemonlist {
-  @apply h-full bg-cyan-700 bg-opacity-50;
+  @apply h-full md:bg-cyan-400 md:bg-opacity-50 md:backdrop-blur-lg;
 }
 
 @keyframes spin {
@@ -29,9 +29,9 @@
 }
 
 .pokedex-item {
-  @apply border border-blue-300 bg-blue-500 bg-opacity-50 text-white p-5 rounded-[15px] mb-5 text-center text-lg capitalize flex flex-col items-center md:w-52 md:h-52;
+  @apply border border-blue-300 bg-blue-500 bg-opacity-50 text-white p-5 rounded-[15px] mb-5 text-center text-lg capitalize flex flex-col md:flex-row justify-evenly items-center md:text-4xl;
 }
 
 .pokedex-item img {
-  @apply w-20 h-auto mb-2;
+  @apply w-20 h-auto mb-2 md:w-40;
 }

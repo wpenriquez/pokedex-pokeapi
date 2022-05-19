@@ -5,7 +5,7 @@
 html {
   @apply h-full;
   body {
-    @apply backdrop-blur-sm h-full overflow-hidden;
+    @apply backdrop-blur-sm h-full;
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
@@ -19,7 +19,7 @@ html {
     }
 
     #root {
-      @apply h-full;
+      @apply h-full overflow-y-hidden;
     }
   }
 }

@@ -6,7 +6,7 @@ html {
 }
 
 html body {
-  @apply backdrop-blur-sm h-full overflow-hidden;
+  @apply backdrop-blur-sm h-full;
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
@@ -20,5 +20,5 @@ html body.search, html body.list, html body.pokemon {
 }
 
 html body #root {
-  @apply h-full;
+  @apply h-full overflow-y-hidden;
 }

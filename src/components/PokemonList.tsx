@@ -111,20 +111,19 @@ const PokemonList: React.FC = () => {
                 </button>
               </div>
               {/* LIST OF POKEMON */}
-              <div className="pokemon-list w-full h-[27rem] overflow-y-scroll md:overflow-y-auto flex flex-col md:flex-row">
-                  {data.results &&
-                    data.results.map((val: any) => (
-                      <div
-                        key={pokemonId(val.url)}
-                        onClick={() => showPokemon(val.name, val.url)}
-                        className="pokedex-item"
-                      >
-                        <img src={pokemonIcon(pokemonId(val.url))} alt="" />
+              <div className="pokemon-list w-full md:w-[70%] md:mx-auto h-[27rem] md:h-[52rem] overflow-y-scroll md:overflow-y-auto flex flex-col">
+                {data.results &&
+                  data.results.map((val: any, index: number) => (
+                    <div
+                      key={pokemonId(val.url)}
+                      onClick={() => showPokemon(val.name, val.url)}
+                      className="pokedex-item"
+                    >
+                      <img src={pokemonIcon(pokemonId(val.url))} alt="" />
 
-                        <p>#{`${pokemonId(val.url)} ${val.name}`}</p>
-                      </div>
-                    ))}
-                
+                      <p>#{`${pokemonId(val.url)} ${val.name}`}</p>
+                    </div>
+                  ))}
               </div>
               {/* POKEDEX BOTTOM NAV ICONS */}
               {data.results && (
